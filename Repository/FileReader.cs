@@ -7,5 +7,9 @@ namespace Compilor_In_Csharp.Repository
 {
     public class FileHandler
     {
+        public static async Task<string[]> ReadFile(string filePath)
+        {
+            return await File.ReadAllLinesAsync(filePath);
+        }
     }
 }

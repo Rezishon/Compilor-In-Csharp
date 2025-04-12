@@ -11,5 +11,9 @@ namespace Repository
         {
             return CommentRemover(await File.ReadAllLinesAsync(filePath));
         }
+
+        public static List<string> CommentRemover(string[] strings)
+        {
+        }
     }
 }

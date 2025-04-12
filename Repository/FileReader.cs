@@ -14,6 +14,7 @@ namespace Repository
 
         public static List<string> CommentRemover(string[] strings)
         {
+            List<string> stringsList = new List<string>();
         }
     }
 }

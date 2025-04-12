@@ -26,6 +26,16 @@ namespace Repository
                     }
                 }
             }
+
+            foreach (var item in strings)
+            {
+                if (!string.IsNullOrEmpty(item))
+                {
+                    stringsList.Add(item.Trim());
+                }
+            }
+
+            return stringsList;
         }
     }
 }

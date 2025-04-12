@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Compilor_In_Csharp.Repository
+namespace Repository
 {
     public class FileHandler
     {

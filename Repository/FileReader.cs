@@ -15,6 +15,17 @@ namespace Repository
         public static List<string> CommentRemover(string[] strings)
         {
             List<string> stringsList = new List<string>();
+
+            foreach (var item in strings)
+            {
+                if (Regex.IsMatch(item, Languages.LanguagesDic["Bash"]["CommentRegex"]))
+                {
+                    if (!Regex.IsMatch(item, Languages.LanguagesDic["Bash"]["CommentRegexException"]))
+                    {
+                        strings[Array.IndexOf(strings, item)] = Regex.Replace(item, Languages.LanguagesDic["Bash"]["CommentRegex"], "");
+                    }
+                }
+            }
         }
     }
 }

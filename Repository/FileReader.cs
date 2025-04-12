@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class FileHandler
+    public static class FileHandler
     {
-        public static async Task<string[]> ReadFile(string filePath)
+        public static async Task<List<string>> ReadFile(string filePath)
         {
-            return await File.ReadAllLinesAsync(filePath);
+            return CommentRemover(await File.ReadAllLinesAsync(filePath));
         }
     }
 }

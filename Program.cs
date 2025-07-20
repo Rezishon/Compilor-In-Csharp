@@ -78,6 +78,14 @@ class Program
                 PrintParseTreeNode(parseTree.Root, 0);
             }
 #endif
+
+            switch (parseTree.Tokens[0].Text)
+            {
+                case "echo":
+                    string echoInGoStr = ProcessEchoCommand(parseTree);
+                    ResultFileManager.AddResultFileData(echoInGoStr);
+                    break;
+            }
         }
         {
 

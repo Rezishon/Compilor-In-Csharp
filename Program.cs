@@ -12,6 +12,14 @@ class Program
     {
         EnvManager.SetEnvs();
         string[] bashFileLines = await File.ReadAllLinesAsync(@"./sample.bash");
+#if DEBUG
+                    Console.WriteLine("File Content:");
+                    foreach (var item in bashFileLines)
+                    {
+                        Console.WriteLine("  " + item);
+                    }
+                    Console.WriteLine("-------------------");
+#endif
         {
             List<string> strings = await FileHandler.ReadFile(@"/home/rezishon/storage/Project/Compilor-In-Csharp/sample.bash");
             foreach (var item in strings)

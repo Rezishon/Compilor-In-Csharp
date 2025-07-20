@@ -20,6 +20,10 @@ class Program
                     }
                     Console.WriteLine("-------------------");
 #endif
+
+        var grammar = new BashGrammar();
+        var languageData = new LanguageData(grammar);
+        var parser = new Parser(languageData);
         {
             List<string> strings = await FileHandler.ReadFile(@"/home/rezishon/storage/Project/Compilor-In-Csharp/sample.bash");
             foreach (var item in strings)

@@ -89,6 +89,8 @@ class Program
 
             ResultFileManager.Build();
         }
+        ResultFileManager.Execute();
+    }
     private static string ProcessEchoCommand(ParseTree parseTree)
     {
         if (parseTree.Tokens.Count <= 1)

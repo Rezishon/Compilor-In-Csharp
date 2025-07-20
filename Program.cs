@@ -24,6 +24,19 @@ class Program
         var grammar = new BashGrammar();
         var languageData = new LanguageData(grammar);
         var parser = new Parser(languageData);
+        // // Test cases
+        // string[] testScripts = new string[]
+        // {
+        //     "echo hello rezi",
+        //     // "a=20",
+        //     // "echo 123",
+        //     // "myvar=\"some value\"",
+        //     // "echo $myvar", // Note: $var expansion is *not* handled by this simple grammar yet!
+        //     // // It will parse '$myvar' as a single Identifier for now.
+        //     // // Handling '$' for variable expansion requires more complex rules.
+        //     // "echo 'line 1'; a=10; echo \"line 2\"",myvar
+        //     // "var=value\necho $var", // Newline as separator
+        // };
         {
             List<string> strings = await FileHandler.ReadFile(@"/home/rezishon/storage/Project/Compilor-In-Csharp/sample.bash");
             foreach (var item in strings)

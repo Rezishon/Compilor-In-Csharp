@@ -86,6 +86,8 @@ class Program
                     ResultFileManager.AddResultFileData(echoInGoStr);
                     break;
             }
+
+            ResultFileManager.Build();
         }
     private static string ProcessEchoCommand(ParseTree parseTree)
     {

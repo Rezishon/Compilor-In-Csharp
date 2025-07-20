@@ -53,6 +53,31 @@ class Program
 
                 return;
             }
+#if DEBUG
+            Console.WriteLine($"\n--- Parsing Script: ---\n{script}\n-----------------------");
+
+            if (parseTree.Status == ParseTreeStatus.Error)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Parsing Failed!");
+                foreach (var message in parseTree.ParserMessages)
+                {
+                    Console.WriteLine($"Error: {message.Message} at {message.Location}");
+                }
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Parsing Successful!");
+                Console.ResetColor();
+                // You can inspect the parseTree.Root to see the AST
+                // For a visual representation, use Irony's Grammar Explorer (recommended for development!)
+                Console.WriteLine("Parse Tree Root: " + parseTree.Root.Term.Name);
+                // Optionally print a simple representation of the tree:
+                PrintParseTreeNode(parseTree.Root, 0);
+            }
+#endif
         }
         {
 

@@ -91,6 +91,7 @@ class Program
         }
         ResultFileManager.Execute();
     }
+
     private static string ProcessEchoCommand(ParseTree parseTree)
     {
         if (parseTree.Tokens.Count <= 1)
@@ -117,4 +118,19 @@ class Program
 
         return $"fmt.Println(\"{output}\")";
     }
+
+#if DEBUG
+    private static void PrintParseTreeNode(ParseTreeNode node, int indentLevel)
+    {
+        string indent = new string(' ', indentLevel * 2);
+        Console.WriteLine(
+            $"{indent}{node.Term.Name} ({node.Span.Location.Line}:{node.Span.Location.Column}): {node.Token?.Text}"
+        );
+
+        foreach (var child in node.ChildNodes)
+        {
+            PrintParseTreeNode(child, indentLevel + 1);
+        }
+    }
+#endif
 }

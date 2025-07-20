@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿#undef DEBUG
+using System.Threading.Tasks;
+using Irony.Parsing;
+using Laxer;
 using Repository;
-namespace Compilor_In_Csharp;
+
+namespace Compiler_In_Csharp;
 
 class Program
 {

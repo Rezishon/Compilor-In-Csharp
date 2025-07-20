@@ -87,9 +87,30 @@ class Program
                     break;
             }
         }
+    private static string ProcessEchoCommand(ParseTree parseTree)
+    {
+        if (parseTree.Tokens.Count <= 1)
         {
-
+            return "fmt.Println()";
         }
 
+        // Skip the 'echo' token and process remaining tokens
+        var arguments = parseTree.Tokens.Skip(1);
+        var processedArgs = new List<string>();
+
+        foreach (var token in arguments)
+        {
+            string text = token.Text;
+            // If it's a quoted string, keep the content but remove the quotes
+            if (text.StartsWith("\"") || text.StartsWith("'") || text.StartsWith("`"))
+            {
+                text = text.Trim('"', '\'', '`');
+            }
+            processedArgs.Add(text);
+        }
+
+        string output = string.Join("", processedArgs);
+
+        return $"fmt.Println(\"{output}\")";
     }
 }

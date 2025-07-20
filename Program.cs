@@ -24,6 +24,7 @@ class Program
         var grammar = new BashGrammar();
         var languageData = new LanguageData(grammar);
         var parser = new Parser(languageData);
+
         // // Test cases
         // string[] testScripts = new string[]
         // {

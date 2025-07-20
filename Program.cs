@@ -38,16 +38,11 @@ class Program
         //     // "var=value\necho $var", // Newline as separator
         // };
         {
-            List<string> strings = await FileHandler.ReadFile(@"/home/rezishon/storage/Project/Compilor-In-Csharp/sample.bash");
-            foreach (var item in strings)
             {
-                System.Console.WriteLine(item);
             }
         }
-        catch (Exception)
         {
 
-            throw;
         }
 
     }

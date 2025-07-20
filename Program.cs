@@ -43,6 +43,15 @@ class Program
             ParseTree parseTree = parser.Parse(script);
             if (parseTree.Status == ParseTreeStatus.Error)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Parsing Failed!");
+                foreach (var message in parseTree.ParserMessages)
+                {
+                    Console.WriteLine($"Error: {message.Message} at {message.Location}");
+                }
+                Console.ResetColor();
+
+                return;
             }
         }
         {

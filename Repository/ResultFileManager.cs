@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class ResultFileManager
-    {
+    public class ResultFileManager { 
+        public 
+    }
 }

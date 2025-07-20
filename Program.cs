@@ -10,7 +10,8 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        try
+        EnvManager.SetEnvs();
+        string[] bashFileLines = await File.ReadAllLinesAsync(@"./sample.bash");
         {
             List<string> strings = await FileHandler.ReadFile(@"/home/rezishon/storage/Project/Compilor-In-Csharp/sample.bash");
             foreach (var item in strings)

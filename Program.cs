@@ -37,6 +37,8 @@ class Program
         //     // "echo 'line 1'; a=10; echo \"line 2\"",myvar
         //     // "var=value\necho $var", // Newline as separator
         // };
+
+        foreach (var script in bashFileLines)
         {
             {
             }

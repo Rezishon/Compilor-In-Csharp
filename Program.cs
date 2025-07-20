@@ -40,6 +40,7 @@ class Program
 
         foreach (var script in bashFileLines)
         {
+            ParseTree parseTree = parser.Parse(script);
             {
             }
         }

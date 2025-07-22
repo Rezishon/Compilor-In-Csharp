@@ -17,5 +17,10 @@ namespace Repository
             "func main() {",
             "}",
         ];
+
+        public static void AddResultFileData(string echoInGoStr)
+        {
+            resultFileData.Insert(resultFileData.Count - 1, echoInGoStr);
+        }
     }
 }

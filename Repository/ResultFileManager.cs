@@ -22,5 +22,19 @@ namespace Repository
         {
             resultFileData.Insert(resultFileData.Count - 1, echoInGoStr);
         }
+        private static void BuildResultFile()
+        {
+            try
+            {
+                File.WriteAllLines(
+                    EnvManager.GetEnvironmentVariable(EnvironmentKeys.ResultFilePath),
+                    resultFileData
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while building result file: " + ex.Message);
+            }
+        }
     }
 }

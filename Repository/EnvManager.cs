@@ -26,6 +26,15 @@ namespace Repository
                 "GolangBinaryFilePath",
                 $"{baseDirectory}golang_binary_file"
             );
+        public static string GetEnvironmentVariable(EnvironmentKeys key)
+        {
+            return Environment.GetEnvironmentVariable(key.ToString())
+                ?? throw new InvalidOperationException($"Environment variable {key} not found");
+        }
+
+        private static void SetEnvironmentVariable(EnvironmentKeys key, string value)
+        {
+            Environment.SetEnvironmentVariable(key.ToString(), value);
         }
     }
 }

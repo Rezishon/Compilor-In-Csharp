@@ -59,5 +59,27 @@ namespace Repository
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
         }
+
+        private static void ExecuteBinaryFile()
+        {
+            try
+            {
+                using Process process = new Process();
+                process.StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments =
+                        $"-c \"{EnvManager.GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFilePath)}\"",
+                    CreateNoWindow = true, // No separate window
+                };
+                process.Start();
+
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while executing the binary: " + ex.Message);
+            }
+        }
     }
 }

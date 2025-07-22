@@ -1,3 +1,4 @@
+#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,14 @@ namespace Repository
         {
             resultFileData.Insert(resultFileData.Count - 1, echoInGoStr);
         }
+
+        public static void RunEndJobs()
+        {
+            BuildResultFile();
+            BuildBinaryFile();
+            ExecuteBinaryFile();
+        }
+
         private static void BuildResultFile()
         {
             try

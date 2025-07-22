@@ -8,5 +8,14 @@ namespace Repository
 {
     public class ResultFileManager
     {
+        private static List<string> resultFileData =
+        [
+            "package main",
+            "",
+            "import \"fmt\"",
+            "",
+            "func main() {",
+            "}",
+        ];
     }
 }

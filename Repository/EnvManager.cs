@@ -5,6 +5,15 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
+    public enum EnvironmentKeys
+    {
+        BaseDirectory,
+        ResultFileName,
+        ResultFilePath,
+        ResultBinaryFileName,
+        ResultBinaryFilePath,
+    }
+
     public static class EnvManager
     {
         public static void SetEnvs()

@@ -20,12 +20,19 @@ namespace Repository
         {
             string baseDirectory = AppContext.BaseDirectory;
 
-            Environment.SetEnvironmentVariable("BaseDirectory", baseDirectory);
-            Environment.SetEnvironmentVariable("GolangFilePath", $"{baseDirectory}GolangFile.go");
-            Environment.SetEnvironmentVariable(
-                "GolangBinaryFilePath",
-                $"{baseDirectory}golang_binary_file"
+            SetEnvironmentVariable(EnvironmentKeys.BaseDirectory, baseDirectory);
+            SetEnvironmentVariable(EnvironmentKeys.ResultFileName, "GolangFile.go");
+            SetEnvironmentVariable(
+                EnvironmentKeys.ResultFilePath,
+                $"{baseDirectory}{GetEnvironmentVariable(EnvironmentKeys.ResultFileName)}"
             );
+            SetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName, $"golang_binary_file");
+            SetEnvironmentVariable(
+                EnvironmentKeys.ResultBinaryFilePath,
+                $"{baseDirectory}{GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName)}"
+            );
+        }
+
         public static string GetEnvironmentVariable(EnvironmentKeys key)
         {
             return Environment.GetEnvironmentVariable(key.ToString())

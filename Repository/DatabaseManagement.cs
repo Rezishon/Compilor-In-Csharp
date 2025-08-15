@@ -175,5 +175,45 @@ namespace Compiler_In_Csharp.Repository
                 throw new Exception(ex.Message);
             }
         }
+        static async Task<List<VariableTypeRow>> ReadFrom_VariableTypesTable_Async(
+            SqliteConnection connection
+        )
+        {
+            var rows = new List<VariableTypeRow>();
+            try
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM VariableTypesTable;";
+
+                using var reader = await command.ExecuteReaderAsync(); // Asynchronous reader
+                if (!reader.HasRows)
+                {
+                    Console.WriteLine("No data found asynchronously.");
+                    return [];
+                }
+
+                while (await reader.ReadAsync()) // Asynchronous read
+                {
+                    var id = reader.GetInt32(0);
+                    var name = reader.GetString(1);
+                    rows.Add(new VariableTypeRow(id, name));
+                }
+                foreach (var item in rows)
+                {
+                    Console.WriteLine(item.Name);
+                }
+                return rows;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"SqliteException: {ex.Message}");
+                return [];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return [];
+            }
+        }
     }
 }

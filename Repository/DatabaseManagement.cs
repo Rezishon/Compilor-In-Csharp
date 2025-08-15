@@ -9,30 +9,38 @@ namespace Compiler_In_Csharp.Repository
 {
     public class DatabaseManagement
     {
+        #region Database row types
         public record VariableTypeRow(int Id, string Name);
+        #endregion
+
         private enum VariableTypes
         {
             String,
             Number,
         }
+
+        #region Connection strings
         private static readonly string onDiskDatabaseFilePath =
             $"{EnvManager.GetEnvironmentVariable(EnvironmentKeys.BaseDirectory)}Compiler-In-Csharp.db";
         private static readonly string _OnDiskConnectionString =
             $"Data Source={onDiskDatabaseFilePath}";
         private static readonly string _inMemoryConnectionString =
             "Data Source=Compiler-In-Csharp-Db;Mode=Memory;Cache=Shared;";
+        #endregion
 
         DatabaseManagement()
         {
             using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
-
             inMemoryConnection.Open();
         }
+
         ~DatabaseManagement()
         {
             using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
             inMemoryConnection.Close();
         }
+        #region CreateTable
+
         private static async Task CreateEnvironmentVariablesTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
@@ -137,15 +145,23 @@ namespace Compiler_In_Csharp.Repository
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
+
+        #region Pre load methods
         private async static Task CreatePreLoadTables(SqliteConnection connection)
         {
             await CreateVariableTypesTable(connection);
             await CreateVariablesTable(connection);
         }
+
         private static async Task InsertPreLoadData(SqliteConnection connection)
         {
             await InsertTo_VariableTypesTable_Async(VariableTypes.String, connection);
             await InsertTo_VariableTypesTable_Async(VariableTypes.Number, connection);
+        }
+        #endregion
+
+        #region Insert methods
         private static async Task InsertTo_VariableTypesTable_Async(
             VariableTypes typeName,
             SqliteConnection connection
@@ -176,6 +192,9 @@ namespace Compiler_In_Csharp.Repository
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
+
+        #region Read methods
         static async Task<List<VariableTypeRow>> ReadFrom_VariableTypesTable_Async(
             SqliteConnection connection
         )
@@ -216,5 +235,6 @@ namespace Compiler_In_Csharp.Repository
                 return [];
             }
         }
+        #endregion
     }
 }

@@ -88,7 +88,8 @@ namespace Compiler_In_Csharp.Repository
             }
             catch (SqliteException sql)
             {
-                System.Console.WriteLine(sql.Message);
+                transaction.Rollback();
+                throw new SqliteException(sql.Message, 0);
             }
             catch (Exception ex)
             {

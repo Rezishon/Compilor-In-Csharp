@@ -27,9 +27,8 @@ namespace Repository
     {
         public static void SetEnvs()
         {
-            string baseDirectory = AppContext.BaseDirectory;
 
-            SetEnvironmentVariable(EnvironmentKeys.BaseDirectory, baseDirectory);
+            SetEnvironmentVariable(EnvironmentKeys.BaseDirectory, AppContext.BaseDirectory);
             SetEnvironmentVariable(EnvironmentKeys.ResultFileName, "GolangFile.go");
             SetEnvironmentVariable(
                 EnvironmentKeys.ResultFilePath,

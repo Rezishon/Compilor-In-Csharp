@@ -27,6 +27,7 @@ namespace Repository
     {
         public static void SetEnvs()
         {
+            #region Environment Keys
 
             SetEnvironmentVariable(EnvironmentKeys.BaseDirectory, AppContext.BaseDirectory);
             SetEnvironmentVariable(EnvironmentKeys.ResultFileName, "GolangFile.go");
@@ -39,6 +40,7 @@ namespace Repository
                 EnvironmentKeys.ResultBinaryFilePath,
                 $"{GetEnvironmentVariable(EnvironmentKeys.BaseDirectory)}{GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName)}"
             );
+            #endregion
         }
 
         public static string GetEnvironmentVariable(EnvironmentKeys key)

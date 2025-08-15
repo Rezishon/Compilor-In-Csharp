@@ -106,5 +106,24 @@ namespace Compiler_In_Csharp.Repository
             }
         }
 
+        static async Task CreateKeywordTypesTable(SqliteConnection connection)
+        {
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var _command = connection.CreateCommand();
+                _command.CommandText = EnvManager.GetEnvironmentVariable(
+                    QueryStrings.CreateKeywordTypesTable
+                );
+                await _command.ExecuteNonQueryAsync();
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

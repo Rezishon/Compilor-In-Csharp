@@ -39,6 +39,28 @@ namespace Compiler_In_Csharp.Repository
             using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
             inMemoryConnection.Close();
         }
+
+        public static async void ConnectToDatabase()
+        {
+            try
+            {
+                using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
+                await inMemoryConnection.OpenAsync();
+                Console.WriteLine("Connected to SQLite in memory database asynchronously!");
+                await CreatePreLoadTables(inMemoryConnection);
+                await InsertPreLoadData(inMemoryConnection);
+
+                await ReadFrom_VariableTypesTable_Async(inMemoryConnection);
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"SQLite Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
         #region CreateTable
 
         private static async Task CreateEnvironmentVariablesTable(SqliteConnection connection)

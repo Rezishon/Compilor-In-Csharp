@@ -15,5 +15,12 @@ namespace Compiler_In_Csharp.Repository
             $"Data Source={onDiskDatabaseFilePath}";
         private static readonly string _inMemoryConnectionString =
             "Data Source=Compiler-In-Csharp-Db;Mode=Memory;Cache=Shared;";
+
+        DatabaseManagement()
+        {
+            using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
+
+            inMemoryConnection.Open();
+        }
     }
 }

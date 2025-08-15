@@ -29,6 +29,11 @@ namespace Compiler_In_Csharp.Repository
             inMemoryConnection.Open();
         }
         static async Task CreateEnvironmentVariablesTable(SqliteConnection connection)
+        ~DatabaseManagement()
+        {
+            using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
+            inMemoryConnection.Close();
+        }
         {
             using var transaction = connection.BeginTransaction();
             try

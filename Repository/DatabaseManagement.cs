@@ -125,5 +125,10 @@ namespace Compiler_In_Csharp.Repository
                 throw new Exception(ex.Message);
             }
         }
+        private async static Task CreatePreLoadTables(SqliteConnection connection)
+        {
+            await CreateVariableTypesTable(connection);
+            await CreateVariablesTable(connection);
+        }
     }
 }

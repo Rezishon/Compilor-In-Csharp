@@ -1,5 +1,6 @@
 ﻿#undef DEBUG
 using System.Threading.Tasks;
+using Compiler_In_Csharp.Repository;
 using Irony.Parsing;
 using Laxer;
 using Repository;
@@ -12,6 +13,7 @@ class Program
     {
         EnvManager.SetEnvs();
         string[] bashFileLines = await File.ReadAllLinesAsync(@"./sample.bash");
+        DatabaseManagement.ConnectToDatabase();
 #if DEBUG
                     Console.WriteLine("File Content:");
                     foreach (var item in bashFileLines)

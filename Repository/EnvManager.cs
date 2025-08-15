@@ -14,6 +14,15 @@ namespace Repository
         ResultBinaryFilePath,
     }
 
+    public enum QueryStrings
+    {
+        CreateEnvironmentVariablesTable,
+        CreateVariablesTable,
+        CreateVariableTypesTable,
+        CreateKeywordsTable,
+        CreateKeywordTypesTable,
+    }
+
     public static class EnvManager
     {
         public static void SetEnvs()

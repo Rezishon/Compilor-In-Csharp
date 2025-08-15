@@ -60,7 +60,7 @@ namespace Repository
                 @"
             CREATE TABLE IF NOT EXISTS VariablesTable (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT NOT NULL,
+                Name TEXT UNIQUE NOT NULL,
                 Type INTEGER NOT NULL,
                 Value TEXT,
                 ScopeIndex INTEGER NOT NULL,
@@ -73,8 +73,7 @@ namespace Repository
                 @"
             CREATE TABLE IF NOT EXISTS VariableTypesTable (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT NOT NULL,
-                SampleValue TEXT
+                Name TEXT UNIQUE NOT NULL
             );"
             );
 
@@ -97,9 +96,10 @@ namespace Repository
                 Name TEXT NOT NULL,
             );"
             );
-        }
 
             #endregion
+        }
+
         public static string GetEnvironmentVariable<T>(T key)
             where T : Enum
         {

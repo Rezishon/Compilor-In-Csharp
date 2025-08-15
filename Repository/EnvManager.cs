@@ -40,7 +40,11 @@ namespace Repository
                 EnvironmentKeys.ResultBinaryFilePath,
                 $"{GetEnvironmentVariable(EnvironmentKeys.BaseDirectory)}{GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName)}"
             );
+
             #endregion
+
+            #region Query Strings
+
             SetEnvironmentVariable(
                 QueryStrings.CreateEnvironmentVariablesTable,
                 @"
@@ -95,6 +99,7 @@ namespace Repository
             );
         }
 
+            #endregion
         public static string GetEnvironmentVariable<T>(T key)
             where T : Enum
         {

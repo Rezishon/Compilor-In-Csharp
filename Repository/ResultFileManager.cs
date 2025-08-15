@@ -7,21 +7,29 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
+    public enum GolangLibs
+    {
+        fmt,
+    }
+
     public class ResultFileManager
     {
-        private static List<string> resultFileData =
-        [
-            "package main",
-            "",
-            "import \"fmt\"",
-            "",
-            "func main() {",
-            "}",
-        ];
+        private static bool isFirstLib = true;
+        private static List<string> resultFileData = ["package main", "", "func main() {", "}"];
 
         public static void AddResultFileData(string echoInGoStr)
         {
             resultFileData.Insert(resultFileData.Count - 1, echoInGoStr);
+        }
+
+        public static void AddLibToResultFile(GolangLibs lib)
+        {
+            if (isFirstLib)
+            {
+                resultFileData.Insert(1, "");
+                isFirstLib = false;
+            }
+            resultFileData.Insert(2, $"import \"{lib.ToString()}\"");
         }
 
         public static void RunEndJobs()

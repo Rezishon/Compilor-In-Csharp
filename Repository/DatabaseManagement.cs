@@ -130,5 +130,9 @@ namespace Compiler_In_Csharp.Repository
             await CreateVariableTypesTable(connection);
             await CreateVariablesTable(connection);
         }
+        private static async Task InsertPreLoadData(SqliteConnection connection)
+        {
+            await InsertTo_VariableTypesTable_Async(VariableTypes.String, connection);
+            await InsertTo_VariableTypesTable_Async(VariableTypes.Number, connection);
     }
 }

@@ -41,5 +41,25 @@ namespace Compiler_In_Csharp.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        static async Task CreateVariablesTable(SqliteConnection connection)
+        {
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var _command = connection.CreateCommand();
+                _command.CommandText = EnvManager.GetEnvironmentVariable(
+                    QueryStrings.CreateVariablesTable
+                );
+                await _command.ExecuteNonQueryAsync();
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

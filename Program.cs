@@ -83,6 +83,7 @@ class Program
 #endif
 
             switch (parseTree.Tokens[0].Text)
+            switch (parseTree.Tokens[0].Terminal.ToString())
             {
                 case "echo":
                     string echoInGoStr = ProcessEchoCommand(parseTree);

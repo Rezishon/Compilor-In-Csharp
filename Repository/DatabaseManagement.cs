@@ -145,5 +145,35 @@ namespace Compiler_In_Csharp.Repository
         {
             await InsertTo_VariableTypesTable_Async(VariableTypes.String, connection);
             await InsertTo_VariableTypesTable_Async(VariableTypes.Number, connection);
+        private static async Task InsertTo_VariableTypesTable_Async(
+            VariableTypes typeName,
+            SqliteConnection connection
+        )
+        {
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var command = connection.CreateCommand();
+                command.CommandText =
+                    @$"
+            INSERT INTO VariableTypesTable (Name)
+            VALUES ('{typeName.ToString()}');";
+                // command.Parameters.AddWithValue("$name", name);
+                // command.Parameters.AddWithValue("$age", age);
+                await command.ExecuteNonQueryAsync();
+
+                transaction.Commit();
+            }
+            catch (SqliteException sql)
+            {
+                transaction.Rollback();
+                throw new SqliteException(sql.Message, 0);
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

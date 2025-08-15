@@ -63,7 +63,7 @@ namespace Laxer
             Statement.Rule = EchoCommand | VariableAssignment | Comment;
             MakeStarRule(CommandArgList, CommandArg);
             EchoCommand.Rule = Echo + CommandArgList;
-            CommandArg.Rule = SingleQuotedString | DoubleQuotedString | Number | Identifier; // For unquoted words/variables
+            CommandArg.Rule = SingleQuotedString | DoubleQuotedString | Number | Identifier;
             VariableAssignment.Rule = VariableName + Equal + VariableValue;
             VariableName.Rule = Identifier;
             VariableValue.Rule = SingleQuotedString | DoubleQuotedString | Number | Identifier;

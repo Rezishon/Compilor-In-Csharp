@@ -86,6 +86,7 @@ class Program
             switch (parseTree.Tokens[0].Terminal.ToString())
             {
                 case "echo":
+                    ResultFileManager.AddLibToResultFile(GolangLibs.fmt);
                     string echoInGoStr = ProcessEchoCommand(parseTree);
                     ResultFileManager.AddResultFileData(echoInGoStr);
                     break;

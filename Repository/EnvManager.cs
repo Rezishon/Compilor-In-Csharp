@@ -32,12 +32,12 @@ namespace Repository
             SetEnvironmentVariable(EnvironmentKeys.ResultFileName, "GolangFile.go");
             SetEnvironmentVariable(
                 EnvironmentKeys.ResultFilePath,
-                $"{baseDirectory}{GetEnvironmentVariable(EnvironmentKeys.ResultFileName)}"
+                $"{GetEnvironmentVariable(EnvironmentKeys.BaseDirectory)}{GetEnvironmentVariable(EnvironmentKeys.ResultFileName)}"
             );
             SetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName, $"golang_binary_file");
             SetEnvironmentVariable(
                 EnvironmentKeys.ResultBinaryFilePath,
-                $"{baseDirectory}{GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName)}"
+                $"{GetEnvironmentVariable(EnvironmentKeys.BaseDirectory)}{GetEnvironmentVariable(EnvironmentKeys.ResultBinaryFileName)}"
             );
         }
 

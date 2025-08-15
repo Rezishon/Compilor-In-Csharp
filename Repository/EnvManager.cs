@@ -95,13 +95,15 @@ namespace Repository
             );
         }
 
-        public static string GetEnvironmentVariable(EnvironmentKeys key)
+        public static string GetEnvironmentVariable<T>(T key)
+            where T : Enum
         {
             return Environment.GetEnvironmentVariable(key.ToString())
                 ?? throw new InvalidOperationException($"Environment variable {key} not found");
         }
 
-        private static void SetEnvironmentVariable(EnvironmentKeys key, string value)
+        private static void SetEnvironmentVariable<T>(T key, string value)
+            where T : Enum
         {
             Environment.SetEnvironmentVariable(key.ToString(), value);
         }

@@ -28,12 +28,12 @@ namespace Compiler_In_Csharp.Repository
 
             inMemoryConnection.Open();
         }
-        static async Task CreateEnvironmentVariablesTable(SqliteConnection connection)
         ~DatabaseManagement()
         {
             using var inMemoryConnection = new SqliteConnection(_inMemoryConnectionString);
             inMemoryConnection.Close();
         }
+        private static async Task CreateEnvironmentVariablesTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
             try
@@ -53,7 +53,7 @@ namespace Compiler_In_Csharp.Repository
             }
         }
 
-        static async Task CreateVariablesTable(SqliteConnection connection)
+        private static async Task CreateVariablesTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
             try
@@ -73,7 +73,7 @@ namespace Compiler_In_Csharp.Repository
             }
         }
 
-        static async Task CreateVariableTypesTable(SqliteConnection connection)
+        private static async Task CreateVariableTypesTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
             try
@@ -97,7 +97,7 @@ namespace Compiler_In_Csharp.Repository
             }
         }
 
-        static async Task CreateKeywordsTable(SqliteConnection connection)
+        private static async Task CreateKeywordsTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
             try
@@ -117,7 +117,7 @@ namespace Compiler_In_Csharp.Repository
             }
         }
 
-        static async Task CreateKeywordTypesTable(SqliteConnection connection)
+        private static async Task CreateKeywordTypesTable(SqliteConnection connection)
         {
             using var transaction = connection.BeginTransaction();
             try

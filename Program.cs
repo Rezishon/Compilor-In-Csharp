@@ -90,6 +90,7 @@ class Program
                     string echoInGoStr = ProcessEchoCommand(parseTree);
                     ResultFileManager.AddResultFileData(echoInGoStr);
                     break;
+                case "Identifier":
             }
         }
         ResultFileManager.RunEndJobs();
@@ -104,22 +105,45 @@ class Program
 
         // Skip the 'echo' token and process remaining tokens
         var arguments = parseTree.Tokens.Skip(1);
-        var processedArgs = new List<string>();
 
-        foreach (var token in arguments)
+        var paramType = arguments.ToList()[0].Terminal.Name;
+
+        if (paramType == "Number")
         {
-            string text = token.Text;
-            // If it's a quoted string, keep the content but remove the quotes
-            if (text.StartsWith("\"") || text.StartsWith("'") || text.StartsWith("`"))
+            var processedArgs = new List<string>();
+
+            foreach (var token in arguments)
             {
-                text = text.Trim('"', '\'', '`');
+                string text = token.Text;
+
+                processedArgs.Add(text);
             }
-            processedArgs.Add(text);
+
+            string output = string.Join("", processedArgs);
+
+            return $"fmt.Println({output})";
         }
+        else if (paramType == "DoubleQuotedString")
+        {
+            var processedArgs = new List<string>();
 
-        string output = string.Join("", processedArgs);
+            foreach (var token in arguments)
+            {
+                string text = token.Text;
 
-        return $"fmt.Println(\"{output}\")";
+                // If it's a quoted string, keep the content but remove the quotes
+                if (text.StartsWith("\"") || text.StartsWith("'") || text.StartsWith("`"))
+                {
+                    text = text.Trim('"', '\'', '`');
+                }
+                processedArgs.Add(text);
+            }
+
+            string output = string.Join("", processedArgs);
+
+            return $"fmt.Println(\"{output}\")";
+        }
+        return "fmt.Println()";
     }
 
 #if DEBUG

@@ -15,11 +15,11 @@ namespace Laxer
             var Identifier = new IdentifierTerminal("Identifier");
             var Number = new NumberLiteral("Number");
             var Boolean = new RegexBasedTerminal("Boolean", @"\b(true|false)\b");
-            var SingleQuotedString = new StringLiteral(
-                "SingleQuotedString",
-                "'",
-                StringOptions.AllowsAllEscapes
-            );
+            // var SingleQuotedString = new StringLiteral(
+            //     "SingleQuotedString",
+            //     "'",
+            //     StringOptions.AllowsAllEscapes
+            // );
             var DoubleQuotedString = new StringLiteral(
                 "DoubleQuotedString",
                 "\"",
@@ -40,6 +40,7 @@ namespace Laxer
             var AndAnd = ToTerm("&&");
             var OrOr = ToTerm("||");
             var Bang = ToTerm("!");
+            var Echo = ToTerm("echo");
             var If = ToTerm("if");
             var Then = ToTerm("then");
             var Fi = ToTerm("fi");
@@ -58,6 +59,7 @@ namespace Laxer
             var Semicolon = ToTerm(";");
             var NewLine = new NewLineTerminal("NewLine");
             var Comment = new CommentTerminal("Comment", "#", "\n", "\r\n");
+            var Dollar = ToTerm("$");
             NonGrammarTerminals.Add(Comment);
             #endregion
 
@@ -75,11 +77,17 @@ namespace Laxer
             var Block = new NonTerminal("Block");
             var ArgumentList = new NonTerminal("ArgumentList");
             var Value = new NonTerminal("Value");
+            var EchoStatement = new NonTerminal("EchoStatement");
+
+            var VarName = Identifier;
+            var VarCall = new NonTerminal("VariableCall");
+            VarCall.Rule = Dollar + Identifier;
 
             // Define the rules for each non-terminal
 
             // A Value can be a number, boolean, string, or variable.
-            Value.Rule = Number | Boolean | SingleQuotedString | DoubleQuotedString | Variable;
+            // Value.Rule = Number | Boolean | SingleQuotedString | DoubleQuotedString | Variable;
+            Value.Rule = Number | Boolean | DoubleQuotedString | Variable;
 
             // An Expression can be a value or a more complex arithmetic/logical expression.
             Expression.Rule =
@@ -99,12 +107,12 @@ namespace Laxer
                 | Bang + Expression
                 | LParen + Expression + RParen;
 
-            // An AssignmentStatement is an Identifier followed by an equal sign and an expression.
-            AssignmentStatement.Rule = Identifier + Equal + Expression;
+            AssignmentStatement.Rule = VarName + Equal + Expression;
 
             // A CommandStatement is a command name (Identifier) followed by a list of arguments.
             ArgumentList.Rule = MakeStarRule(ArgumentList, ToTerm(" "), Value | Identifier);
             CommandStatement.Rule = CmdPrefix + Identifier + ArgumentList;
+
 
             // An IfStatement has an expression, a `then` block, and an optional `else` block.
             IfStatement.Rule =
@@ -132,10 +140,13 @@ namespace Laxer
                 | IfStatement
                 | WhileStatement
                 | ForStatement
-                | FunctionDeclaration;
+                | FunctionDeclaration
+                | EchoStatement;
 
             // The main Program is a list of statements separated by newlines or semicolons.
             Program.Rule = MakeStarRule(Program, NewLine | Semicolon, Statement);
+
+            EchoStatement.Rule = Echo + Expression;
 
             // Set the root of the grammar to the Program.
             this.Root = Program;

@@ -12,7 +12,7 @@ class Program
     static async Task Main(string[] args)
     {
         EnvManager.SetEnvs();
-        string[] bashFileLines = await File.ReadAllLinesAsync(@"./sample.bash");
+        string[] bashFileLines = await File.ReadAllLinesAsync(@"./sample.bsh");
         DatabaseManagement.ConnectToDatabase();
 #if DEBUG
                     Console.WriteLine("File Content:");
@@ -26,31 +26,23 @@ class Program
         var grammar = new BashGrammar();
         var languageData = new LanguageData(grammar);
         var parser = new Parser(languageData);
+        var lineNumber = 0;
 
-        // // Test cases
-        // string[] testScripts = new string[]
-        // {
-        //     "echo hello rezi",
-        //     // "a=20",
-        //     // "echo 123",
-        //     // "myvar=\"some value\"",
-        //     // "echo $myvar", // Note: $var expansion is *not* handled by this simple grammar yet!
-        //     // // It will parse '$myvar' as a single Identifier for now.
-        //     // // Handling '$' for variable expansion requires more complex rules.
-        //     // "echo 'line 1'; a=10; echo \"line 2\"",myvar
-        //     // "var=value\necho $var", // Newline as separator
-        // };
-
-        foreach (var script in bashFileLines)
+        foreach (var bashLine in bashFileLines)
         {
-            ParseTree parseTree = parser.Parse(script);
+            lineNumber++;
+            ParseTree parseTree = parser.Parse(bashLine);
+
+            #region Error in parsing
             if (parseTree.Status == ParseTreeStatus.Error)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Parsing Failed!");
+                Console.WriteLine("Parsing Failed! {");
                 foreach (var message in parseTree.ParserMessages)
                 {
-                    Console.WriteLine($"Error: {message.Message} at {message.Location}");
+                    Console.WriteLine(
+                        $"Error: {message.Message} at {message.Location} of line {lineNumber}\n}}"
+                    );
                 }
                 Console.ResetColor();
 
@@ -81,16 +73,24 @@ class Program
                 PrintParseTreeNode(parseTree.Root, 0);
             }
 #endif
+            #endregion
 
-            switch (parseTree.Tokens[0].Text)
+            foreach (var item in parseTree.Tokens)
+            {
+                Console.WriteLine(item.Terminal);
+            }
             switch (parseTree.Tokens[0].Terminal.ToString())
             {
                 case "echo":
                     ResultFileManager.AddLibToResultFile(GolangLibs.fmt);
+
                     string echoInGoStr = ProcessEchoCommand(parseTree);
                     ResultFileManager.AddResultFileData(echoInGoStr);
                     break;
                 case "Identifier":
+                    //TODO: if user add a Identifier and didn't used it, it will get error
+                    ResultFileManager.AddResultFileData(bashLine.Replace("$", "").Replace("=", ":="));
+                    break;
             }
         }
         ResultFileManager.RunEndJobs();
@@ -98,11 +98,6 @@ class Program
 
     private static string ProcessEchoCommand(ParseTree parseTree)
     {
-        if (parseTree.Tokens.Count <= 1)
-        {
-            return "fmt.Println()";
-        }
-
         // Skip the 'echo' token and process remaining tokens
         var arguments = parseTree.Tokens.Skip(1);
 
@@ -143,10 +138,23 @@ class Program
 
             return $"fmt.Println(\"{output}\")";
         }
+        else if (paramType == "Variable")
+        {
+            var processedArgs = new List<string>();
+
+            foreach (var token in arguments)
+            {
+                string text = token.Text;
+                processedArgs.Add(text.Replace("$", ""));
+            }
+
+            string output = string.Join("", processedArgs);
+            // return $"fmt.Println({arguments.ToList()[0].Value.ToString()!.Replace("$", "")})";
+            return $"fmt.Println({output})";
+        }
         return "fmt.Println()";
     }
 
-#if DEBUG
     private static void PrintParseTreeNode(ParseTreeNode node, int indentLevel)
     {
         string indent = new string(' ', indentLevel * 2);
@@ -154,10 +162,5 @@ class Program
             $"{indent}{node.Term.Name} ({node.Span.Location.Line}:{node.Span.Location.Column}): {node.Token?.Text}"
         );
 
-        foreach (var child in node.ChildNodes)
-        {
-            PrintParseTreeNode(child, indentLevel + 1);
-        }
     }
-#endif
 }

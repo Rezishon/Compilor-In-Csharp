@@ -42,9 +42,10 @@ namespace Laxer
             var Bang = ToTerm("!");
             var Echo = ToTerm("echo");
             var If = ToTerm("if");
-            var Then = ToTerm("then");
+            var Then = ToTerm("then=>");
             var Fi = ToTerm("fi");
             var Else = ToTerm("else");
+            var Elif = ToTerm("elif");
             var For = ToTerm("for");
             var In = ToTerm("in");
             var Do = ToTerm("do");
@@ -56,6 +57,8 @@ namespace Laxer
             var RParen = ToTerm(")");
             var LBrace = ToTerm("{");
             var RBrace = ToTerm("}");
+            var LSBrace = ToTerm("[");
+            var RSBrace = ToTerm("]");
             var Semicolon = ToTerm(";");
             var NewLine = new NewLineTerminal("NewLine");
             var Comment = new CommentTerminal("Comment", "#", "\n", "\r\n");
@@ -78,6 +81,8 @@ namespace Laxer
             var ArgumentList = new NonTerminal("ArgumentList");
             var Value = new NonTerminal("Value");
             var EchoStatement = new NonTerminal("EchoStatement");
+            var StatementList = new NonTerminal("StatementList");
+            var ThenSeparator = new NonTerminal("ThenSeparator");
 
             var VarName = Identifier;
             var VarCall = new NonTerminal("VariableCall");
@@ -116,8 +121,10 @@ namespace Laxer
 
             // An IfStatement has an expression, a `then` block, and an optional `else` block.
             IfStatement.Rule =
-                If + Expression + Then + Block + Fi
-                | If + Expression + Then + Block + Else + Block + Fi;
+                If + LSBrace + Expression + RSBrace + Then + StatementList + Semicolon + Fi
+             | If + LSBrace + Expression + RSBrace + Then + StatementList + Semicolon + Else + StatementList + Semicolon + Fi;
+            //TODO: we can have else if or -> elif
+            // | If + LSBrace + Expression + RSBrace + Semicolon + Then + Program + Elif + LSBrace + Expression + RSBrace + Semicolon + Then + Program + Fi;
 
             // A WhileStatement has an expression and a `do` block.
             WhileStatement.Rule = While + Expression + Do + Block + Done;
@@ -131,7 +138,7 @@ namespace Laxer
                 | Identifier + LParen + RParen + Block;
 
             // A Block is a set of statements inside curly braces.
-            Block.Rule = LBrace + Program + RBrace;
+            Block.Rule = LBrace + StatementList + RBrace;
 
             // A Statement can be one of the various types defined above, or a command.
             Statement.Rule =
@@ -142,6 +149,7 @@ namespace Laxer
                 | ForStatement
                 | FunctionDeclaration
                 | EchoStatement;
+            StatementList.Rule = MakePlusRule(StatementList, NewLine | Semicolon, Statement);
 
             // The main Program is a list of statements separated by newlines or semicolons.
             Program.Rule = MakeStarRule(Program, NewLine | Semicolon, Statement);
@@ -164,6 +172,8 @@ namespace Laxer
                 RParen,
                 LBrace,
                 RBrace,
+                LSBrace,
+                RSBrace,
                 Semicolon,
                 NewLine,
                 Then,

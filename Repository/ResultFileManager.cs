@@ -16,6 +16,7 @@ namespace Repository
     {
         private static bool isFirstLib = true;
         private static List<string> resultFileData = ["package main", "", "func main() {", "}"];
+        private static List<GolangLibs> usedLibs = [];
 
         public static void AddResultFileData(string echoInGoStr)
         {
@@ -29,7 +30,12 @@ namespace Repository
                 resultFileData.Insert(1, "");
                 isFirstLib = false;
             }
-            resultFileData.Insert(2, $"import \"{lib.ToString()}\"");
+
+            if (!usedLibs.Contains(GolangLibs.fmt))
+            {
+                resultFileData.Insert(2, $"import \"{lib.ToString()}\"");
+                usedLibs.Add(GolangLibs.fmt);
+            }
         }
 
         public static void RunEndJobs()

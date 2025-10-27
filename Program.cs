@@ -79,17 +79,82 @@ class Program
             {
                 Console.WriteLine(item.Terminal);
             }
-            switch (parseTree.Tokens[0].Terminal.ToString())
+
+            List<Irony.Parsing.Token> treeOfTokens = parseTree.Tokens;
+            // switch (parseTree.Tokens[0].Terminal.ToString())
+            string statementHeader = treeOfTokens.First().Terminal.ToString();
+            switch (statementHeader)
             {
                 case "echo":
-                    ResultFileManager.AddLibToResultFile(GolangLibs.fmt);
-
-                    string echoInGoStr = ProcessEchoCommand(parseTree);
-                    ResultFileManager.AddResultFileData(echoInGoStr);
+                    ProcessEchoCommand(treeOfTokens);
                     break;
                 case "Identifier":
                     //TODO: if user add a Identifier and didn't used it, it will get error
-                    ResultFileManager.AddResultFileData(bashLine.Replace("$", "").Replace("=", ":="));
+                    ResultFileManager.AddResultFileData(
+                        bashLine.Replace("$", "").Replace("=", ":=")
+                    );
+                    break;
+
+                case "if":
+                    try
+                    {
+                        var status = true;
+                        treeOfTokens = treeOfTokens.Skip(2).ToList();
+                        while (true)
+                        {
+                            status = ProcessCondition(
+                                (double)(int)treeOfTokens.First().Value,
+                                (string)treeOfTokens.Skip(1).First().Value,
+                                (double)(int)treeOfTokens.Skip(2).First().Value
+                            );
+
+                            Console.WriteLine(status);
+                            treeOfTokens = treeOfTokens.Skip(2).ToList();
+
+                            if (status == false)
+                            {
+                                break;
+                            }
+
+                            if (treeOfTokens[1].Terminal.Name == "]")
+                            {
+                                break;
+                            }
+                        }
+
+                        treeOfTokens = treeOfTokens.Skip(3).ToList();
+                        statementHeader = treeOfTokens.First().Terminal.ToString();
+
+                        if (status == true)
+                        {
+                            if (statementHeader == "echo")
+                            {
+                                while (true)
+                                {
+                                    ProcessEchoCommand(
+                                        treeOfTokens
+                                            .TakeWhile(token => token.Terminal.Name != ";")
+                                            .ToList()
+                                    );
+
+                                    treeOfTokens = treeOfTokens
+                                        .SkipWhile(token => token.Terminal.Name != ";")
+                                        .Skip(1)
+                                        .ToList();
+
+                                    if (treeOfTokens.First().Terminal.ToString() == "fi")
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
                     break;
             }
         }

@@ -161,6 +161,30 @@ class Program
         Console.WriteLine(
             $"{indent}{node.Term.Name} ({node.Span.Location.Line}:{node.Span.Location.Column}): {node.Token?.Text}"
         );
+    }
 
+    private static bool ProcessCondition(
+        double firstExpression,
+        string compareTypes,
+        double secondExpression
+    )
+    {
+        switch (compareTypes)
+        {
+            case "-eq":
+                return firstExpression == secondExpression;
+            case "-ne":
+                return firstExpression != secondExpression;
+            case "-gt":
+                return firstExpression > secondExpression;
+            case "-ge":
+                return firstExpression >= secondExpression;
+            case "-lt":
+                return firstExpression < secondExpression;
+            case "-le":
+                return firstExpression <= secondExpression;
+            default:
+                return false;
+        }
     }
 }

@@ -96,63 +96,47 @@ class Program
         ResultFileManager.RunEndJobs();
     }
 
-    private static string ProcessEchoCommand(ParseTree parseTree)
+    private static void ProcessEchoCommand(List<Irony.Parsing.Token> args)
     {
-        // Skip the 'echo' token and process remaining tokens
-        var arguments = parseTree.Tokens.Skip(1);
+        string result = "fmt.Println()";
+        ResultFileManager.AddLibToResultFile(GolangLibs.fmt);
+        args = args.Skip(1).ToList();
 
-        var paramType = arguments.ToList()[0].Terminal.Name;
+        var paramType = args.First().Terminal.Name;
 
-        if (paramType == "Number")
+        var processedArgs = new List<string>();
+
+        foreach (var token in args)
         {
-            var processedArgs = new List<string>();
-
-            foreach (var token in arguments)
+            string text = token.Text;
+            if (paramType == "DoubleQuotedString")
             {
-                string text = token.Text;
-
-                processedArgs.Add(text);
-            }
-
-            string output = string.Join("", processedArgs);
-
-            return $"fmt.Println({output})";
-        }
-        else if (paramType == "DoubleQuotedString")
-        {
-            var processedArgs = new List<string>();
-
-            foreach (var token in arguments)
-            {
-                string text = token.Text;
-
                 // If it's a quoted string, keep the content but remove the quotes
                 if (text.StartsWith("\"") || text.StartsWith("'") || text.StartsWith("`"))
                 {
                     text = text.Trim('"', '\'', '`');
                 }
-                processedArgs.Add(text);
             }
-
-            string output = string.Join("", processedArgs);
-
-            return $"fmt.Println(\"{output}\")";
-        }
-        else if (paramType == "Variable")
-        {
-            var processedArgs = new List<string>();
-
-            foreach (var token in arguments)
+            else if (paramType == "Variable")
             {
-                string text = token.Text;
-                processedArgs.Add(text.Replace("$", ""));
+                text = text.Replace("$", "");
             }
 
-            string output = string.Join("", processedArgs);
-            // return $"fmt.Println({arguments.ToList()[0].Value.ToString()!.Replace("$", "")})";
-            return $"fmt.Println({output})";
+            processedArgs.Add(text);
         }
-        return "fmt.Println()";
+
+        string output = string.Join("", processedArgs);
+
+        if (paramType == "DoubleQuotedString")
+        {
+            result = $"fmt.Println(\"{output}\")";
+        }
+        else
+        {
+            result = $"fmt.Println({output})";
+        }
+
+        ResultFileManager.AddResultFileData(result);
     }
 
     private static void PrintParseTreeNode(ParseTreeNode node, int indentLevel)

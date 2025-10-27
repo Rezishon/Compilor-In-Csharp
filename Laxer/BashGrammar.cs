@@ -118,11 +118,20 @@ namespace Laxer
             ArgumentList.Rule = MakeStarRule(ArgumentList, ToTerm(" "), Value | Identifier);
             CommandStatement.Rule = CmdPrefix + Identifier + ArgumentList;
 
-
             // An IfStatement has an expression, a `then` block, and an optional `else` block.
             IfStatement.Rule =
                 If + LSBrace + Expression + RSBrace + Then + StatementList + Semicolon + Fi
-             | If + LSBrace + Expression + RSBrace + Then + StatementList + Semicolon + Else + StatementList + Semicolon + Fi;
+                | If
+                    + LSBrace
+                    + Expression
+                    + RSBrace
+                    + Then
+                    + StatementList
+                    + Semicolon
+                    + Else
+                    + StatementList
+                    + Semicolon
+                    + Fi;
             //TODO: we can have else if or -> elif
             // | If + LSBrace + Expression + RSBrace + Semicolon + Then + Program + Elif + LSBrace + Expression + RSBrace + Semicolon + Then + Program + Fi;
 
@@ -160,8 +169,8 @@ namespace Laxer
             this.Root = Program;
 
             // Define operator precedence for arithmetic and logical expressions.
-            RegisterOperators(10, Associativity.Left, Plus, Minus);
-            RegisterOperators(20, Associativity.Left, Star, Slash);
+            RegisterOperators(10, Associativity.Left, Star, Slash);
+            RegisterOperators(20, Associativity.Left, Plus, Minus);
             RegisterOperators(30, Associativity.Left, EqOp, NeOp, LtOp, GtOp, LeOp, GeOp);
             RegisterOperators(40, Associativity.Left, AndAnd, OrOr);
             RegisterOperators(50, Associativity.Left, Bang);

@@ -1,4 +1,5 @@
 @use 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* You can add your global SCSS styles below this line */
 body {

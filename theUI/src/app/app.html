@@ -1,3 +1,11 @@
-<div style="height: 500px; border: 1px solid #ccc">
-  <ngx-monaco-editor></ngx-monaco-editor>
-</div>
+<form [formGroup]="codeForm">
+  <div style="height: 500px; border: 1px solid #ccc">
+    <ngx-monaco-editor
+      [options]="editorOptions"
+      formControlName="code"
+      class="bg-black"
+    ></ngx-monaco-editor>
+  </div>
+
+  <button type="button" (click)="onSaveFile()">ذخیره فایل</button>
+</form>

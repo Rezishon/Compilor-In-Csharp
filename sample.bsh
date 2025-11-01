@@ -3,4 +3,3 @@
  echo $b
 #echo  false && false && true
 # if [ 10 -gt 7 -lt 9 ] then=> echo "two"; echo 2+5; fi
-

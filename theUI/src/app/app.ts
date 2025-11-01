@@ -19,6 +19,8 @@ export class App implements OnInit {
   });
 
   //TODO: Does file changed since last load or not
+  //TODO: Return to main code
+  //TODO: Run the saved code and show the result below the codes
 
   protected readonly title = signal('theUi');
 

@@ -2,8 +2,25 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        string filePath = "/home/rezishon/Projects/Compilor-In-Csharp/sample.bsh";
+        const string MyAllowAllOriginsPolicy = "_myAllowAllOrigins";
+
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(
+                name: MyAllowAllOriginsPolicy,
+                policy =>
+                {
+                    // The simplest and most permissive setting:
+                    // This is the "for all" part you requested.
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                }
+            );
+        });
+
         var app = builder.Build();
+        app.UseCors(MyAllowAllOriginsPolicy);
 
         app.MapGet("/", () => "Hello World!");
 

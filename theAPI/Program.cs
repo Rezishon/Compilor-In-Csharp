@@ -33,8 +33,9 @@ internal class Program
                 return Results.Ok(new { code = fileContent });
             }
         );
+
         app.MapPost(
-            "/uploadfile",
+            "/saveFile",
             (FileUploadRequest request) =>
             {
                 if (string.IsNullOrEmpty(request.Base64Data))
@@ -47,10 +48,7 @@ internal class Program
                     byte[] fileBytes = Convert.FromBase64String(request.Base64Data);
 
                     var fileName = request.FileName;
-                    File.WriteAllBytes(
-                        "/home/rezishon/Projects/Compilor-In-Csharp/sample.bsh",
-                        fileBytes
-                    );
+                    File.WriteAllBytes(filePath, fileBytes);
 
                     return Results.Ok(
                         new { Message = $"فایل شما با سایز {fileBytes.Length}بایت ذخیره شد" }

@@ -12,8 +12,6 @@ internal class Program
                 name: MyAllowAllOriginsPolicy,
                 policy =>
                 {
-                    // The simplest and most permissive setting:
-                    // This is the "for all" part you requested.
                     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }
             );
@@ -22,8 +20,19 @@ internal class Program
         var app = builder.Build();
         app.UseCors(MyAllowAllOriginsPolicy);
 
-        app.MapGet("/", () => "Hello World!");
+        app.MapGet(
+            "/getFileData",
+            async () =>
+            {
+                if (!File.Exists(filePath))
+                {
+                    return Results.NotFound($"File not found at: {filePath}");
+                }
 
+                string fileContent = await File.ReadAllTextAsync(filePath);
+                return Results.Ok(new { code = fileContent });
+            }
+        );
         app.MapPost(
             "/uploadfile",
             (FileUploadRequest request) =>
